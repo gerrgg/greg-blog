@@ -24,6 +24,10 @@ app.use(express.static('dist'))
 app.use(express.json())
 app.use(middleware.requestLogger)
 
+app.get('/', (req, res) => {
+  res.send('Welcome to my Blog API')
+})
+
 app.use('/api/blogs', blogsRouter)
 
 app.use(middleware.unknownEndpoint)
