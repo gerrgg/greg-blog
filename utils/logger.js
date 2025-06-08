@@ -6,4 +6,4 @@ const error = (...params) => {
     console.error(...params)
 }
 
-modules.exports = { info, error }
+module.exports = { info, error }

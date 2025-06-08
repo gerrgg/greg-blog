@@ -1,0 +1,42 @@
+# Node.js dependencies
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# dotenv environment variables
+.env
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Build output
+dist/
+build/
+
+# Optional: editor/IDE files
+.vscode/
+.idea/
+
+# Optional: coverage/testing
+coverage/
+.nyc_output/
+
+# Optional: local database
+*.sqlite
+*.db
+
+# Optional: PM2 logs or configs
+.pids/
+*.pm2-log
