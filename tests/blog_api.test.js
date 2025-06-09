@@ -10,10 +10,7 @@ const api = supertest(app)
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  let blogObject = new Blog(helper.initialBlogs[0])
-  await blogObject.save()
-  blogObject = new Blog(helper.initialBlogs[1])
-  await blogObject.save()
+  await Blog.insertMany(helper.initialBlogs)
 })
 
 test('blogs are returned as json', async () => {
@@ -72,6 +69,64 @@ test('a blog without a title can not be added', async () => {
 
   const blogsAtEnd = await helper.blogsInDb()
   assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+})
+
+test('a specific blog can be viewed', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToView = blogsAtStart[0]
+
+  const resultBlog = await api
+    .get(`/api/blogs/${blogToView.id}`)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  assert.deepStrictEqual(resultBlog.body, blogToView)
+})
+
+test('a specific blog can be deleted', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToDelete = blogsAtStart[0]
+
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+
+  const blogsAtEnd = await helper.blogsInDb()
+
+  const contents = blogsAtEnd.map(n => n.title)
+  assert(!contents.includes(blogToDelete.title))
+
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+})
+
+test('blogs are returned as JSON and contain id property instead of _id', async () => {
+  const response = await api
+    .get('/api/blogs')
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const blogs = response.body
+
+  blogs.forEach(blog => {
+    assert.ok(blog.id, 'blog should have id property')
+    assert.strictEqual(blog._id, undefined, 'blog should NOT have _id property')
+  })
+})
+
+test('blogs that are created without a likes property default to 0', async () => {
+  const newBlog = {
+    title: "New blog without likes",
+    author: 'Gregory B',
+    url: 'www.example.com'
+  }
+
+  const savedBlog = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  assert.strictEqual(savedBlog.body.likes, 0)
 })
 
 
