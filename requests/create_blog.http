@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-"title": "How to Survive a JavaScript Singularity",
-"author": "Nova Byte",
-"url": "https://galacticdev.net/blog/js-singularity",
-"likes": 142
-}
+    "title": "Node.js Wormholes and Event Horizons",
+    "author": "Zed Callisto",
+    "url": "https://galacticdev.net/blog/node-wormholes",
+    "likes": 154
+  }
