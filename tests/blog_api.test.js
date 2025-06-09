@@ -1,10 +1,42 @@
-const { test, after } = require('node:test')
+const assert = require('node:assert')
+const { test, after, beforeEach, before } = require('node:test')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
-const assert = require('node:assert')
 const app = require('../app')
+const Blog = require('../models/Blog')
 
 const api = supertest(app)
+
+const initialBlogs = [
+  {
+    "title": "How to Survive a JavaScript Singularity",
+    "author": "Nova Byte",
+    "url": "https://galacticdev.net/blog/js-singularity",
+    "likes": 142
+  },
+  {
+    "title": "React Quantum State Management",
+    "author": "Quark Jenkins",
+    "url": "https://galacticdev.net/blog/react-quantum-state",
+    "likes": 187
+  },
+  {
+    "title": "The Dark Side of Asynchronous Loops",
+    "author": "Echo Loop",
+    "url": "https://galacticdev.net/blog/async-darkness",
+    "likes": 231
+  },
+]
+
+beforeEach(async () => {
+  await Blog.deleteMany({})
+  let blogObject = new Blog(initialBlogs[0])
+  await blogObject.save()
+  blogObject = new Blog(initialBlogs[1])
+  await blogObject.save()
+  blogObject = new Blog(initialBlogs[2])
+  await blogObject.save()
+})
 
 test('blogs are returned as json', async () => {
   await api
@@ -16,14 +48,14 @@ test('blogs are returned as json', async () => {
 test('all blogs are returned', async () => {
   const response = await api.get('/api/blogs')
 
-  assert.strictEqual(response.body.length, 1)
+  assert.strictEqual(response.body.length, initialBlogs.length)
 })
 
 test("a specific blog is within the returned blogs", async () => {
   const response = await api.get('/api/blogs')
 
   const titles = response.body.map(r => r.title)
-  assert(titles.includes('Node.js Wormholes and Event Horizons'));
+  assert(titles.includes('The Dark Side of Asynchronous Loops'));
 })
 
 after(async () => {
