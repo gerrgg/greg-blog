@@ -58,6 +58,48 @@ test("a specific blog is within the returned blogs", async () => {
   assert(titles.includes('The Dark Side of Asynchronous Loops'));
 })
 
+test('a valid blog can be added', async () => {
+  const newBlog = {
+    title: 'Test title 3',
+    likes: 0,
+    author: 'Gregory B',
+    url: 'www.example.com'
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+
+  const contents = response.body.map(r => r.title)
+
+  assert.strictEqual(response.body.length, initialBlogs.length + 1)
+
+  assert(contents.includes('Test title 3'))
+})
+
+test('a blog without a title can not be added', async () => {
+  const newBlog = {
+    likes: 0,
+    author: 'Gregory B',
+    url: 'www.example.com'
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+
+  assert.strictEqual(response.body.length, initialBlogs.length)
+})
+
+
 after(async () => {
   await mongoose.connection.close()
 })
