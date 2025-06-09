@@ -34,4 +34,22 @@ blogRouter.post('/', async (request, response, next) => {
   response.status(201).json(savedBlog)
 })
 
+blogRouter.put('/:id', async (request, response, next) => {
+  const { title, author, likes, url } = request.body
+
+  const blogToUpdate = await Blog.findById(request.params.id)
+
+  if (!blogToUpdate) {
+    return response.status(404).end()
+  }
+
+  blogToUpdate.title = title
+  blogToUpdate.author = author
+  blogToUpdate.likes = likes
+  blogToUpdate.url = url
+
+  const savedBlog = await blogToUpdate.save()  
+  response.json(savedBlog)
+})
+
 module.exports = blogRouter
