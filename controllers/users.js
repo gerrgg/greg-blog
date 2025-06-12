@@ -10,6 +10,10 @@ usersRouter.get("/", async (request, response) => {
 usersRouter.post("/", async (request, response) => {
   const { username, name, password } = request.body;
 
+  if(! username ){
+    return response.status(400).json({ error: "username is required" });
+  }
+
   const saltRounds = 10;
 
   // Check if username and password are provided

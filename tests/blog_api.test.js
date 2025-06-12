@@ -5,10 +5,12 @@ const supertest = require('supertest')
 const app = require('../app')
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const api = supertest(app)
 
 beforeEach(async () => {
+  await User.deleteMany({})
   await Blog.deleteMany({})
   await Blog.insertMany(helper.initialBlogs)
 })
@@ -62,6 +64,8 @@ describe('viewing a specific blog', () => {
 
 describe('adding a blog', () => {
   test('a valid blog can be added', async () => {
+    const token = await helper.getTestToken()
+
     const newBlog = {
       title: 'Test title 3',
       likes: 0,
@@ -72,6 +76,7 @@ describe('adding a blog', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `Bearer ${token}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -83,6 +88,8 @@ describe('adding a blog', () => {
   })
 
   test('a blog without a title cannot be added', async () => {
+    const token = await helper.getTestToken()
+
     const newBlog = {
       likes: 0,
       author: 'Gregory B',
@@ -92,6 +99,7 @@ describe('adding a blog', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `Bearer ${token}`)
       .expect(400)
       .expect('Content-Type', /application\/json/)
 
@@ -100,6 +108,8 @@ describe('adding a blog', () => {
   })
 
   test('blogs that are created without a likes property default to 0', async () => {
+    const token = await helper.getTestToken()
+
     const newBlog = {
       title: "New blog without likes",
       author: 'Gregory B',
@@ -109,6 +119,7 @@ describe('adding a blog', () => {
     const savedBlog = await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `Bearer ${token}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 

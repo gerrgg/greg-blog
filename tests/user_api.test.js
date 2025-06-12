@@ -28,7 +28,7 @@ describe("when there is initially one user in the db", () => {
     const usersAtStart = await helper.usersInDb();
 
     const newUser = {
-      username: "newuser",
+      username: "newuser2",
       name: "New User",
       password: "newpassword",
     };
@@ -58,6 +58,22 @@ describe("when there is initially one user in the db", () => {
     const result = await api.post("/api/users").send(newUser).expect(400);
 
     assert.strictEqual(result.body.error, "username must be unique");
+
+    const usersAtEnd = await helper.usersInDb();
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length);
+  });
+
+  test("creation fails when username is not provided", async () => {
+    const usersAtStart = await helper.usersInDb();
+
+    const newUser = {
+      name: "No Username User",
+      password: "nopassword",
+    };
+
+    const result = await api.post("/api/users").send(newUser).expect(400);
+
+    assert.strictEqual(result.body.error, "username is required");
 
     const usersAtEnd = await helper.usersInDb();
     assert.strictEqual(usersAtEnd.length, usersAtStart.length);
