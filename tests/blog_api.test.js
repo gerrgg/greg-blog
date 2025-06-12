@@ -10,9 +10,10 @@ const User = require('../models/user')
 const api = supertest(app)
 
 beforeEach(async () => {
-  await User.deleteMany({})
   await Blog.deleteMany({})
   await Blog.insertMany(helper.initialBlogs)
+
+  await helper.getTestToken()
 })
 
 describe('when there are initially some blogs saved', () => {

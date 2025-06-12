@@ -51,19 +51,24 @@ const getTestToken = async () => {
     username: 'testuser',
     name: 'Test User',
     password: 'password'
-  }
+  };
 
-  // Create user
-  await api.post('/api/users').send(testUser)
+  // Check if the user already exists
+  const existingUser = await User.findOne({ username: testUser.username });
+
+  if (!existingUser) {
+    await api.post('/api/users').send(testUser);
+  }
 
   // Login user and get token
   const loginResponse = await api.post('/api/login').send({
     username: testUser.username,
     password: testUser.password
-  })
+  });
 
-  return loginResponse.body.token
-}
+  return loginResponse.body.token;
+};
+
 
 
 module.exports = {
