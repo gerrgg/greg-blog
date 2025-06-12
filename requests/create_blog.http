@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFzdHJvX2V4cGxvcmVyIiwiaWQiOiI2ODRiNGQwZWJhNmNjYWU0ODI3ZTRhNTEiLCJpYXQiOjE3NDk3NjU4NTAsImV4cCI6MTc0OTc2OTQ1MH0.nqv5zHZ2q68NPjDERt35j5rzhZrN5myeRxwN5U4rxeQ
 
 {
-  "title": "Voyage to the Ice Moons: Exploring Europa and Enceladus",
-  "author": "Dr. Lyra Mendoza",
-  "url": "https://astrofrontiers.org/blog/ice-moon-voyage",
-  "likes": 237,
-  "userId": "684a15318a12c7b62ac07ca8"
+  "title": "The Hidden Geometry of Nature: Why Trees, Shells, and Storms Follow Math",
+  "author": "Elliot R. Thorne",
+  "url": "https://mindsonmath.org/blog/hidden-geometry",
+  "likes": 89
 }
