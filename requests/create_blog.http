@@ -2,8 +2,9 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Node.js Wormholes and Event Horizons",
-    "author": "Zed Callisto",
-    "url": "https://galacticdev.net/blog/node-wormholes",
-    "likes": 154
-  }
+  "title": "Voyage to the Ice Moons: Exploring Europa and Enceladus",
+  "author": "Dr. Lyra Mendoza",
+  "url": "https://astrofrontiers.org/blog/ice-moon-voyage",
+  "likes": 237,
+  "userId": "684a15318a12c7b62ac07ca8"
+}
