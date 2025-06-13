@@ -129,19 +129,76 @@ describe('adding a blog', () => {
 })
 
 describe('deletion of a blog', () => {
-  test('a specific blog can be deleted', async () => {
-    const blogsAtStart = await helper.blogsInDb()
-    const blogToDelete = blogsAtStart[0]
 
+  test('a specific blog can be deleted with valid token', async () => {
+    const token = await helper.getTestToken()
+
+    const newBlog = {
+      title: "New blog without likes",
+      author: 'Gregory B',
+      url: 'www.example.com'
+    }
+
+    const savedBlog = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsBeforeDelete = await helper.blogsInDb()
+    const contentsBeforeDelete = blogsBeforeDelete.map(n => n.title)
+    assert(contentsBeforeDelete.includes(savedBlog.body.title))
+    
     await api
-      .delete(`/api/blogs/${blogToDelete.id}`)
+      .delete(`/api/blogs/${savedBlog.body.id}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
     const contents = blogsAtEnd.map(n => n.title)
 
-    assert(!contents.includes(blogToDelete.title))
-    assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+    assert(!contents.includes(savedBlog.body.title))
+    assert.strictEqual(blogsAtEnd.length, blogsBeforeDelete.length - 1)
+  })
+
+  test('a specific blog cannot be deleted by another user', async () => {
+    const token = await helper.getTestToken()
+    const anotherUserToken = await helper.getTestToken({
+      username: 'anotheruser',
+      name: 'Another User',
+      password: 'password'
+    })
+
+    const newBlog = {
+      title: "New blog without likes",
+      author: 'Gregory B',
+      url: 'www.example.com'
+    }
+
+    const savedBlog = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsBeforeDelete = await helper.blogsInDb()
+    const contentsBeforeDelete = blogsBeforeDelete.map(n => n.title)
+    assert(contentsBeforeDelete.includes(savedBlog.body.title))
+    
+    await api
+      .delete(`/api/blogs/${savedBlog.body.id}`)
+      .set('Authorization', `Bearer ${anotherUserToken}`)
+      .expect(401)
+  })
+
+  test('deleting a blog requires a token', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(401)
   })
 })
 

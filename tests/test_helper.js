@@ -46,12 +46,14 @@ const usersInDb = async () => {
   return users.map((user) => user.toJSON());
 };
 
-const getTestToken = async () => {
-  const testUser = {
-    username: 'testuser',
-    name: 'Test User',
-    password: 'password'
-  };
+const getTestToken = async (testUser = false) => {
+  if( ! testUser ){
+    testUser = {
+      username: 'testuser',
+      name: 'Test User',
+      password: 'password'
+    };
+  }
 
   // Check if the user already exists
   const existingUser = await User.findOne({ username: testUser.username });
