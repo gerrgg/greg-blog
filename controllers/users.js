@@ -14,6 +14,19 @@ usersRouter.post("/", async (request, response) => {
     return response.status(400).json({ error: "username is required" });
   }
 
+  if(username.length < 3){
+    return response.status(400).json({ error: "username must be at least 3 characters long" });
+  }
+
+  if(! password ){
+    return response.status(400).json({ error: "password is required" });
+  }
+
+  if(password.length < 8){
+    return response.status(400).json({ error: "password must be at least 8 characters long" });
+  }
+  
+
   const saltRounds = 10;
 
   // Check if username and password are provided

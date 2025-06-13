@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFzdHJvX2V4cGxvcmVyIiwiaWQiOiI2ODRiNGQwZWJhNmNjYWU0ODI3ZTRhNTEiLCJpYXQiOjE3NDk3NjU4NTAsImV4cCI6MTc0OTc2OTQ1MH0.nqv5zHZ2q68NPjDERt35j5rzhZrN5myeRxwN5U4rxeQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFzdHJvX2V4cGxvcmVyIiwiaWQiOiI2ODRiNGQwZWJhNmNjYWU0ODI3ZTRhNTEiLCJpYXQiOjE3NDk4MzA0NjcsImV4cCI6MTc0OTgzNDA2N30.WgovqCo_OsHObVQsSMIlibQIwL8ARzlxUypacZYup4A
 
 {
-  "title": "The Hidden Geometry of Nature: Why Trees, Shells, and Storms Follow Math",
-  "author": "Elliot R. Thorne",
-  "url": "https://mindsonmath.org/blog/hidden-geometry",
-  "likes": 89
+  "title": "Power and Perception: How Media Shapes Modern Politics",
+  "author": "Dana L. Everett",
+  "url": "https://mindsonmath.org/blog/media-and-politics",
+  "likes": 142
 }
